@@ -8,3 +8,11 @@ body {
 #headshot {
     width: 500px;
 }
+
+.container {
+    text-align: center;
+}
+
+#player {
+    margin-top: 50px;
+}
