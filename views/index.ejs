@@ -52,6 +52,17 @@
     <div id="player"></div>
 
     <script>
+        function linkinsert() {
+        link = document.getElementById("link").value;
+        document.getElementById("inserted").innerHTML = link;
+        
+        link=link.split('v=')[1];
+        var ampersandPosition = link.indexOf('&');
+        if(ampersandPosition != -1) {
+        link.substring(0, ampersandPosition);
+        }
+        document.getElementById("inserted").innerHTML = link;
+        
       // 2. This code loads the IFrame Player API code asynchronously.
       var tag = document.createElement('script');
 
@@ -63,17 +74,11 @@
       //    after the API code downloads.
       var player;
         
-        function linkinsert() {
-            link = document.getElementById("link").value;
-            document.getElementById("inserted").innerHTML = link;
-            
-        }
-        
       function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
           height: '360',
           width: '640',
-          videoId: '0eIY5b0RKE0',
+          videoId: link,
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
@@ -99,6 +104,16 @@
       function stopVideo() {
         player.stopVideo();
       }
+            
+            onYouTubeIframeAPIReady();
+            onPlayerReady();
+            onPlayerStateChange();
+            stopVideo();
+            
+            
+            
+            
+    }
     </script>
 
 
