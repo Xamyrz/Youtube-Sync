@@ -113,7 +113,6 @@
             player.loadVideoById(link);
           }
  
-            socket.on('connect', function () {
               socket.on('status', function(status){
  
               if (status==2){
@@ -121,7 +120,6 @@
                  console.log("pauzujemy");
                }
  
-            });
           });
  
  
