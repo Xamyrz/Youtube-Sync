@@ -80,11 +80,14 @@
           }
  
           // 5. The API calls this function when the player's state changes.
-          //    The function indicates that when playing a video (state=1),
-          //    the player should play for six seconds and then stop.
+          //    The function indicates that when playing a video (state=1)
           var done = false;
           function onPlayerStateChange(event) {
               console.log(event.data);
+ 
+              var temp = event.data;
+              socket.emit('status', temp);
+ 
             if (event.data == YT.PlayerState.PLAYING && !done) {
               done = true;
             }
@@ -113,9 +116,6 @@
      load();
  
 */
- 
- 
- 
    </script>
  
  
