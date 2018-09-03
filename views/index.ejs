@@ -115,11 +115,20 @@
  
               socket.on('status', function(status){
  
-              if (status==2){
-                 player.pauseVideo();
-                 console.log("pauzujemy");
-               }
+              switch (status) {
+                  case 1:
+                      player.playVideo();
+                      break;
+                  case 2:
+                      player.pauseVideo();
+                      break;
+                  case 3:
+                      player.seekTo(0, true);
+                      break;
+                           
+              }
  
+
           });
  
  
