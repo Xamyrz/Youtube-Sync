@@ -12,6 +12,7 @@ app.get('/', (req, res) => res.render('index'));
  
 io.on('connection', function(socket){
   socket.on('status', function(status){
+    io.emit('status', status);
     console.log(status);
   });
   console.log('a user connected');
@@ -20,7 +21,7 @@ io.on('connection', function(socket){
     console.log('a user disconnected')
   });
 });
- 
- 
- 
+
+
+
 http.listen(PORT, () => console.log(`Listening on ${ PORT }`));

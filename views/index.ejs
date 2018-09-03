@@ -50,8 +50,12 @@
  
        <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
         <div id="player"></div>
- 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
         <script>
+ 
+          var socket = io();
+ 
+ 
           // 2. This code loads the IFrame Player API code asynchronously.
           var tag = document.createElement('script');
  
@@ -96,26 +100,31 @@
             player.stopVideo();
           }
  
-     function linkinsert() {
-     link = document.getElementById("link").value;
-     document.getElementById("inserted").innerHTML = link;
+          function linkinsert() {
+            link = document.getElementById("link").value;
+            document.getElementById("inserted").innerHTML = link;
  
-     link=link.split('v=')[1];
-     var ampersandPosition = link.indexOf('&');
-     if(ampersandPosition != -1) {
-     link.substring(0, ampersandPosition);
-     }
-     document.getElementById("inserted").innerHTML = link;
-     player.loadVideoById(link);
-  }
+            link=link.split('v=')[1];
+            var ampersandPosition = link.indexOf('&');
+            if(ampersandPosition != -1) {
+              link.substring(0, ampersandPosition);
+            }
+            document.getElementById("inserted").innerHTML = link;
+            player.loadVideoById(link);
+          }
  
-  /*  function load(){
-       onYouTubeIframeAPIReady();
-       onPlayerReady();
-     }
-     load();
+            socket.on('connect', function () {
+              socket.on('status', function(status){
  
-*/
+              if (status==2){
+                 player.pauseVideo();
+                 console.log("pauzujemy");
+               }
+ 
+            });
+          });
+ 
+ 
    </script>
  
  
@@ -128,9 +137,7 @@
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
    <script src="js/bootstrap.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
-<script>
-  var socket = io();
-</script>
+ 
+ 
  </body>
 </html>
