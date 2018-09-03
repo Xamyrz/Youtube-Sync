@@ -3,6 +3,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
+const PORT = process.env.PORT || 5000;
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
@@ -13,6 +14,4 @@ io.on('connection', function(socket){
   console.log('a user connected');
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
-})
+http.listen(PORT, () => console.log(`Listening on ${ PORT }`));
