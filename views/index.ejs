@@ -114,11 +114,15 @@
               link.substring(0, ampersandPosition);
             }
             document.getElementById("inserted").innerHTML = link;
-            player.loadVideoById(link);
+              socket.emit('links', link);
+              
           }
+            
+              socket.on('links', function(links){
+                player.loadVideoById(links);
+              });
  
               socket.on('statusx', function(statusx){
-                  //socket.on('play', function(play){
                   
                   
                   
@@ -143,7 +147,6 @@
                 
  
 
-         // });
         });
  
  

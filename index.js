@@ -30,6 +30,10 @@ io.on('connection', function(socket){
     io.emit('currenttim', currenttim);
     console.log(currenttim);
   });
+  socket.on('links', function(links){
+    io.emit('links', links);
+    console.log(links);
+  });
   socket.on('disconnect', function () {
     io.emit('user disconnected');
     console.log('a user disconnected')
