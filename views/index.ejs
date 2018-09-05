@@ -89,8 +89,12 @@
           function onPlayerStateChange(event) {
               console.log(event.data);
  
-              var temp = event.data;
-              socket.emit('status', temp);
+              temp = event.data;
+              myid = socket.id;
+              tempmyid = myid + " emited " + temp;
+              console.log("my id is: " + myid);
+              socket.emit('status', tempmyid);
+              socket.emit('statusx', temp);
  
             if (event.data == YT.PlayerState.PLAYING && !done) {
               done = true;
@@ -113,23 +117,34 @@
             player.loadVideoById(link);
           }
  
-              socket.on('status', function(status){
- 
-              switch (status) {
-                  case 1:
-                      player.playVideo();
-                      break;
-                  case 2:
-                      player.pauseVideo();
-                      break;
-                  case 3:
-                      player.seekTo(0, true);
-                      break;
-                           
-              }
+              socket.on('statusx', function(statusx){
+                  //socket.on('play', function(play){
+                  
+                  
+                  
+                      
+                if (statusx == 1) {
+                    player.playVideo();
+                }
+                else if (statusx == 2) {
+                    player.pauseVideo();
+                    
+                    var currenttime = player.getCurrentTime();
+                    socket.emit('currenttim', currenttime);
+                    
+                    socket.on('currenttim', function(currenttim){
+                    player.seekTo(currenttim, true);
+                    console.log(currenttim);
+                    });
+                }
+                else {
+                    console.log("unhandled statusx: " + statusx);
+                }
+                
  
 
-          });
+         // });
+        });
  
  
    </script>

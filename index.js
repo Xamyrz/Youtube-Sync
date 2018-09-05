@@ -11,15 +11,31 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('index'));
  
 io.on('connection', function(socket){
+    prev_statusx = -1; // -1 == unstarted, the default, starting value
+  socket.on('statusx', function(statusx){
+      if (statusx == 3) {
+          prev_statusx = statusx;
+          io.emit('statusx', statusx);
+      }
+      else if (statusx !== prev_statusx){
+          prev_statusx = statusx;
+          io.emit('statusx', prev_statusx);
+      }
+  });
   socket.on('status', function(status){
     io.emit('status', status);
     console.log(status);
   });
-  console.log('a user connected');
+  socket.on('currenttim', function(currenttim){
+    io.emit('currenttim', currenttim);
+    console.log(currenttim);
+  });
   socket.on('disconnect', function () {
     io.emit('user disconnected');
     console.log('a user disconnected')
   });
+  ID = socket.id;
+  console.log('client connected id: '+ socket.id);;
 });
 
 
