@@ -34,7 +34,7 @@
        </div>
        <div id="navbar" class="collapse navbar-collapse">
          <ul class="nav navbar-nav">
-           <li class="active"><a href="#wan">Button1</a></li>
+           <li class="active"><a onclick="createroom()" href="#wan">Create room</a></li>
            <li><a href="#too">Button2</a></li>
            <li><a href="#phree">Button3</a></li>
          </ul>
@@ -54,6 +54,16 @@
         <script>
  
           var socket = io();
+          var room = 'abc';
+            
+            function createroom() {
+                
+                socket.emit('createroom', room);
+                
+                socket.on('createroom', function(createroom){
+                    console.log(socket.id +" joined " + room);
+                });
+            }
  
  
           // 2. This code loads the IFrame Player API code asynchronously.
@@ -70,7 +80,7 @@
             player = new YT.Player('player', {
               height: '360',
               width: '640',
-              videoId: 'CsSgGd6S7GE',
+              videoId: 'HTp5PH8ot6Q',
               events: {
                 'onReady': onPlayerReady,
                 'onStateChange': onPlayerStateChange
@@ -94,7 +104,7 @@
               tempmyid = myid + " emited " + temp;
               console.log("my id is: " + myid);
               socket.emit('status', tempmyid);
-              socket.emit('statusx', temp);
+              socket.emit('statusx', temp, room);
  
             if (event.data == YT.PlayerState.PLAYING && !done) {
               done = true;

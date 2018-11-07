@@ -12,10 +12,10 @@
    <title>Xamyrs Youtube-Sync</title>
  
    <!-- Bootstrap core CSS -->
-   <link href="public/css/bootstrap.min.css" rel="stylesheet">
+   <link href="css/bootstrap.min.css" rel="stylesheet">
  
    <!-- Custom styles for this template -->
-   <link href="public/css/main.css" rel="stylesheet">
+   <link href="css/main.css" rel="stylesheet">
  
  </head>
  
@@ -34,7 +34,7 @@
        </div>
        <div id="navbar" class="collapse navbar-collapse">
          <ul class="nav navbar-nav">
-           <li class="active"><a href="#wan">Button1</a></li>
+           <li class="active"><a onclick="createroom()" href="./room.ejs">Create room</a></li>
            <li><a href="#too">Button2</a></li>
            <li><a href="#phree">Button3</a></li>
          </ul>
@@ -50,8 +50,12 @@
  
        <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
         <div id="player"></div>
- 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
         <script>
+ 
+          var socket = io();
+ 
+ 
           // 2. This code loads the IFrame Player API code asynchronously.
           var tag = document.createElement('script');
  
@@ -80,10 +84,18 @@
           }
  
           // 5. The API calls this function when the player's state changes.
-          //    The function indicates that when playing a video (state=1),
-          //    the player should play for six seconds and then stop.
+          //    The function indicates that when playing a video (state=1)
           var done = false;
           function onPlayerStateChange(event) {
+              console.log(event.data);
+ 
+              temp = event.data;
+              myid = socket.id;
+              tempmyid = myid + " emited " + temp;
+              console.log("my id is: " + myid);
+              socket.emit('status', tempmyid);
+              socket.emit('statusx', temp);
+ 
             if (event.data == YT.PlayerState.PLAYING && !done) {
               done = true;
             }
@@ -92,27 +104,50 @@
             player.stopVideo();
           }
  
-     function linkinsert() {
-     link = document.getElementById("link").value;
-     document.getElementById("inserted").innerHTML = link;
+          function linkinsert() {
+            link = document.getElementById("link").value;
+            document.getElementById("inserted").innerHTML = link;
  
-     link=link.split('v=')[1];
-     var ampersandPosition = link.indexOf('&');
-     if(ampersandPosition != -1) {
-     link.substring(0, ampersandPosition);
-     }
-     document.getElementById("inserted").innerHTML = link;
-     player.loadVideoById(link);
-  }
+            link=link.split('v=')[1];
+            var ampersandPosition = link.indexOf('&');
+            if(ampersandPosition != -1) {
+              link.substring(0, ampersandPosition);
+            }
+            document.getElementById("inserted").innerHTML = link;
+              socket.emit('links', link);
+              
+          }
+            
+              socket.on('links', function(links){
+                player.loadVideoById(links);
+              });
  
-  /*  function load(){
-       onYouTubeIframeAPIReady();
-       onPlayerReady();
-     }
-     load();
+              socket.on('statusx', function(statusx){
+                  
+                  
+                  
+                      
+                if (statusx == 1) {
+                    player.playVideo();
+                }
+                else if (statusx == 2) {
+                    player.pauseVideo();
+                    
+                    var currenttime = player.getCurrentTime();
+                    socket.emit('currenttim', currenttime);
+                    
+                    socket.on('currenttim', function(currenttim){
+                    player.seekTo(currenttim, true);
+                    console.log(currenttim);
+                    });
+                }
+                else {
+                    console.log("unhandled statusx: " + statusx);
+                }
+                
  
-*/
- 
+
+        });
  
  
    </script>
@@ -125,7 +160,9 @@
    ================================================== -->
    <!-- Placed at the end of the document so the pages load faster -->
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-   <script>window.jQuery || document.write('<script src="public/js/jquery.min.js"><\/script>')</script>
-   <script src="public/js/bootstrap.min.js"></script>
+   <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
+   <script src="js/bootstrap.min.js"></script>
+ 
+ 
  </body>
 </html>
